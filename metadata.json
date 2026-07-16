@@ -1,0 +1,6 @@
+{
+  "name": "Trang Quản Lý Lớp Học",
+  "description": "Hệ thống quản lý lớp học toàn diện dành cho Giáo viên chủ nhiệm, Học sinh và Phụ huynh với đầy đủ chức năng điểm danh, báo bài, thời khóa biểu, học phí và điểm số.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

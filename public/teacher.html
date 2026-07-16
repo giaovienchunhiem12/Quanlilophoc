@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trang Giáo Viên - Thiết Kế Đề Thi 2025</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome for beautiful icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  
+  <!-- MathJax Configuration for LaTeX rendering -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <!-- Firebase App & Firestore Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+      color: #1e293b;
+    }
+    .hero-banner {
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+      color: white;
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      border: 1px border #312e81;
+    }
+    .card {
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    }
+    .form-control:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+    }
+    .btn-primary {
+      background-color: #4f46e5;
+      border-color: #4f46e5;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+    }
+    .btn-primary:hover {
+      background-color: #4338ca;
+      border-color: #4338ca;
+    }
+    .btn-success {
+      background-color: #059669;
+      border-color: #059669;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+    }
+    .btn-success:hover {
+      background-color: #047857;
+      border-color: #047857;
+    }
+    .btn-outline-secondary {
+      border-radius: 12px;
+    }
+    .badge-points {
+      font-size: 0.75rem;
+      font-weight: 700;
+      background-color: #e0e7ff;
+      color: #4338ca;
+      border-radius: 9999px;
+      padding: 0.25rem 0.75rem;
+    }
+    .question-block {
+      background-color: white;
+      border-left: 4px solid #4f46e5;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 0 12px 12px 0;
+    }
+    .part-title {
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.025em;
+    }
+    code, pre {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .quiz-code-display {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 2.25rem;
+      font-weight: 900;
+      letter-spacing: 0.25em;
+      color: #1e1b4b;
+      background-color: #e0e7ff;
+      border: 2px dashed #4f46e5;
+      padding: 1rem 2rem;
+      border-radius: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container py-5" style="max-width: 1000px;">
+    <!-- Navigation indicator -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <span class="fw-bold text-indigo"><i class="fa-solid fa-graduation-cap me-2"></i> Hệ Thống Quản Lý Đề Thi</span>
+      <a href="student.html" class="btn btn-sm btn-outline-primary rounded-pill px-3 text-decoration-none">
+        <i class="fa-solid fa-user-pen me-2"></i> Chuyển sang giao diện Học sinh
+      </a>
+    </div>
+
+    <!-- Hero banner section -->
+    <div class="hero-banner shadow-sm">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <span class="badge bg-indigo-500 bg-opacity-25 text-info-light border border-info mb-3 px-3 py-1 text-uppercase font-bold tracking-wider rounded-pill" style="font-size: 10px;">
+            <i class="fa-solid fa-bolt me-1 text-warning"></i> Chuẩn Mới Quốc Gia 2025
+          </span>
+          <h1 class="part-title text-white mb-2">Trang Thiết Kế Đề Thi Giáo Viên</h1>
+          <p class="mb-0 opacity-75 fs-6">Phân tích đề thô tự động để phân tách cấu trúc 3 phần tiêu chuẩn: Trắc nghiệm (4.5đ) - Đúng/Sai (4đ) - Trả lời ngắn (1.5đ).</p>
+        </div>
+        <div class="col-md-4 text-md-end mt-4 mt-md-0">
+          <button onclick="loadSample2025()" class="btn btn-light rounded-pill px-4 text-primary font-bold shadow-sm">
+            <i class="fa-solid fa-file-invoice me-2"></i> Nạp Đề Mẫu 2025
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sub-tabs Navigation -->
+    <ul class="nav nav-tabs mb-4 px-2 border-bottom-0" id="teacher-tabs" style="gap: 5px;">
+      <li class="nav-item">
+        <button class="nav-link active fw-bold px-4 py-2.5" id="tab-btn-design" onclick="switchTab('design')" style="border-radius: 12px 12px 0 0; border: 1px solid transparent; transition: all 0.2s;">
+          <i class="fa-solid fa-pen-ruler me-2 text-indigo"></i>Thiết Kế Đề Thi Mới
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link fw-bold px-4 py-2.5 text-muted" id="tab-btn-manage" onclick="switchTab('manage')" style="border-radius: 12px 12px 0 0; border: 1px solid transparent; transition: all 0.2s;">
+          <i class="fa-solid fa-folder-open me-2 text-indigo"></i>Quản Lý Đề Thi & Bài Nộp
+        </button>
+      </li>
+    </ul>
+
+    <!-- DESIGN SECTION CONTAINER -->
+    <div id="design-section-container">
+      <!-- Main control board -->
+      <div class="card p-4 mb-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <i class="fa-solid fa-file-import text-indigo fs-5"></i>
+          <h5 class="m-0 font-bold text-slate-800">Dán nội dung đề thi của bạn</h5>
+        </div>
+        
+        <!-- Input Text Area -->
+        <div class="mb-4">
+          <textarea id="raw-exam-input" class="form-control" rows="12" placeholder="Dán nội dung đề thi vào đây..." style="font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.6;"></textarea>
+        </div>
+
+        <div class="d-flex flex-column flex-sm-row gap-3">
+          <button id="btn-parse" onclick="parseAndGenerateExam()" class="btn btn-primary flex-grow-1">
+            <i class="fa-solid fa-wand-magic-sparkles me-2"></i> Phân tích và Tạo đề thi
+          </button>
+          <button id="btn-save-quiz" onclick="saveToDatabase()" class="btn btn-success" style="display: none;">
+            <i class="fa-solid fa-cloud-arrow-up me-2"></i> Lưu và lấy mã Quiz
+          </button>
+        </div>
+
+        <!-- Action status box -->
+        <div id="status-alert" class="alert mt-4" style="display: none;"></div>
+      </div>
+
+      <!-- Quiz Code Modal Box -->
+      <div id="quiz-code-card" class="card p-5 mb-4 text-center border-indigo border bg-indigo-50 bg-opacity-10 shadow-sm" style="display: none;">
+        <div class="mx-auto bg-primary text-white d-inline-flex justify-content-center align-items-center rounded-circle mb-3" style="width: 60px; height: 60px;">
+          <i class="fa-solid fa-square-poll-vertical fs-3"></i>
+        </div>
+        <h4 class="part-title text-slate-900 mb-2">ĐỀ THI ĐÃ ĐƯỢC ĐỒNG BỘ THÀNH CÔNG!</h4>
+        <p class="text-muted fs-6 mb-4">Hãy gửi mã Quiz bên dưới cho học sinh để làm bài kiểm tra trực tuyến.</p>
+        
+        <div class="d-inline-flex align-items-center justify-content-center gap-3 mb-4 mx-auto">
+          <div id="display-code" class="quiz-code-display">------</div>
+          <button onclick="copyQuizCode()" class="btn btn-outline-primary p-3 rounded-3" title="Sao chép">
+            <i id="copy-icon" class="fa-regular fa-copy fs-4"></i>
+          </button>
+        </div>
+        <p class="text-muted small mb-0"><i class="fa-solid fa-circle-info me-1"></i> Cơ sở dữ liệu Firebase sẵn sàng đồng bộ trực tiếp với trang <strong>student.html</strong>.</p>
+      </div>
+
+      <!-- Exam Preview Section -->
+      <div id="exam-preview-section" class="mt-5" style="display: none;">
+        <h3 class="part-title mb-4 pb-2 border-bottom flex items-center gap-2">
+          <i class="fa-regular fa-eye me-2 text-indigo"></i> Bản Xem Trước Đề Thi Của Bạn
+        </h3>
+
+        <!-- Part I -->
+        <div id="preview-part1" class="mb-5" style="display: none;">
+          <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded-4 border mb-4">
+            <h5 class="m-0 fw-bold"><i class="fa-regular fa-circle-question me-2 text-primary"></i> PHẦN I. Câu hỏi trắc nghiệm nhiều lựa chọn</h5>
+            <span class="badge-points">4.5 điểm</span>
+          </div>
+          <div id="part1-container" class="space-y-4"></div>
+        </div>
+
+        <!-- Part II -->
+        <div id="preview-part2" class="mb-5" style="display: none;">
+          <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded-4 border mb-4">
+            <h5 class="m-0 fw-bold"><i class="fa-regular fa-circle-check me-2 text-primary"></i> PHẦN II. Câu hỏi trắc nghiệm Đúng/Sai</h5>
+            <span class="badge-points">4.0 điểm</span>
+          </div>
+          <div id="part2-container" class="space-y-4"></div>
+        </div>
+
+        <!-- Part III -->
+        <div id="preview-part3" class="mb-5" style="display: none;">
+          <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded-4 border mb-4">
+            <h5 class="m-0 fw-bold"><i class="fa-regular fa-keyboard me-2 text-primary"></i> PHẦN III. Câu hỏi trả lời ngắn</h5>
+            <span class="badge-points">1.5 điểm</span>
+          </div>
+          <div id="part3-container" class="space-y-4"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MANAGE SECTION CONTAINER -->
+    <div id="manage-section-container" style="display: none;">
+      <!-- Row of overall statistics -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-4">
+          <div class="card p-3 border-0 bg-white shadow-sm d-flex flex-row align-items-center gap-3">
+            <div class="bg-indigo-100 text-indigo rounded-3 p-3">
+              <i class="fa-solid fa-book-open fs-4"></i>
+            </div>
+            <div>
+              <span class="small text-muted d-block uppercase fw-bold" style="font-size: 11px;">Tổng số đề thi</span>
+              <h3 id="stats-total-quizzes" class="m-0 font-mono fw-extrabold text-slate-800">0</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card p-3 border-0 bg-white shadow-sm d-flex flex-row align-items-center gap-3">
+            <div class="bg-emerald-100 text-emerald rounded-3 p-3">
+              <i class="fa-solid fa-user-graduate fs-4"></i>
+            </div>
+            <div>
+              <span class="small text-muted d-block uppercase fw-bold" style="font-size: 11px;">Lượt nộp bài</span>
+              <h3 id="stats-total-submissions" class="m-0 font-mono fw-extrabold text-slate-800">0</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card p-3 border-0 bg-white shadow-sm d-flex flex-row align-items-center gap-3">
+            <div class="bg-warning bg-opacity-25 text-warning rounded-3 p-3">
+              <i class="fa-solid fa-star fs-4"></i>
+            </div>
+            <div>
+              <span class="small text-muted d-block uppercase fw-bold" style="font-size: 11px;">Điểm trung bình</span>
+              <h3 id="stats-avg-score" class="m-0 font-mono fw-extrabold text-slate-800">0.00</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quizzes List Card -->
+      <div class="card p-4 border-0 shadow-sm mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold m-0 text-indigo"><i class="fa-solid fa-list-check me-2"></i> Danh sách đề thi đã tạo</h5>
+          <button onclick="refreshQuizList()" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+            <i class="fa-solid fa-rotate me-1"></i> Làm mới
+          </button>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th class="ps-3" style="width: 120px;">Mã Quiz</th>
+                <th>Tiêu đề đề thi</th>
+                <th style="width: 150px;">Số câu hỏi</th>
+                <th class="text-center" style="width: 130px;">Số bài nộp</th>
+                <th class="text-end pe-3" style="width: 280px;">Hành động</th>
+              </tr>
+            </thead>
+            <tbody id="quizzes-table-body">
+              <tr>
+                <td colspan="5" class="text-center text-muted py-4">Đang tải danh sách đề thi...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Quiz Submissions Card (Shown when quiz selected) -->
+      <div id="quiz-submissions-card" class="card p-4 border-0 shadow-sm mb-4" style="display: none;">
+        <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-3">
+          <div>
+            <h5 class="fw-bold m-0 text-indigo"><i class="fa-solid fa-user-check me-2"></i> Danh sách bài nộp của học sinh</h5>
+            <span id="selected-quiz-info" class="small text-muted"></span>
+          </div>
+          <button onclick="closeSubmissionsView()" class="btn btn-sm btn-outline-secondary">
+            <i class="fa-solid fa-xmark me-1"></i> Đóng
+          </button>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th class="ps-3">Học sinh</th>
+                <th>Mã HS</th>
+                <th>Thời gian nộp</th>
+                <th class="text-center">Phần I (4.5)</th>
+                <th class="text-center">Phần II (4.0)</th>
+                <th class="text-center">Phần III (1.5)</th>
+                <th class="text-center fw-bold">Tổng Điểm</th>
+                <th class="text-end pe-3">Xem chi tiết</th>
+              </tr>
+            </thead>
+            <tbody id="submissions-table-body">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Submission Detail View (Shown when detailed view selected) -->
+      <div id="submission-detail-card" class="card p-4 border border-indigo shadow-sm mb-5" style="display: none;">
+        <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-3">
+          <div>
+            <h5 class="fw-bold m-0 text-indigo"><i class="fa-regular fa-file-lines me-2"></i> Chi tiết bài làm học sinh</h5>
+            <span id="submission-detail-student-info" class="small text-muted"></span>
+          </div>
+          <button onclick="closeSubmissionDetailView()" class="btn btn-sm btn-outline-secondary">
+            <i class="fa-solid fa-xmark me-1"></i> Đóng chi tiết
+          </button>
+        </div>
+        <div id="submission-detail-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- SAMPLE DE 2025 ---
+    const SAMPLE_DE = `PHẦN I. Câu hỏi trắc nghiệm nhiều lựa chọn 4.5 điểm (gồm 18 câu trắc nghiệm: 4 đáp án lựa chọn)
+
+Câu 1. Cho hàm số $y=f(x)$ có bảng biến thiên dưới đây. Hàm số đồng biến trên khoảng nào?
+A. $(-\\infty; 2)$
+B. $(0; 2)$
+C. $(2; +\\infty)$
+D. $(-2; 0)$
+Đáp án: B
+
+Câu 2. Cho hàm số bậc ba $y=ax^3+bx^2+cx+d$ có đồ thị là cực đại tại điểm nào?
+A. $x=1$
+B. $x=3$
+C. $x=-1$
+D. $x=2$
+Đáp án: B
+
+Câu 3. Với $a$ là số thực dương tùy ý, biểu thức $\\log_2(a^4)$ bằng biểu thức nào?
+A. $4 + \\log_2 a$
+B. $\\frac{1}{4} \\log_2 a$
+C. $4 \\log_2 a$
+D. $\\log_2(a+4)$
+Đáp án: C
+
+Câu 4. Tìm tập nghiệm $S$ của phương trình mũ $3^{x-1} = 9$.
+A. $S=\\{3\\}$
+B. $S=\\{2\\}$
+C. $S=\\{4\\}$
+D. $S=\\{1\\}$
+Đáp án: A
+
+Câu 5. Tìm đạo hàm của hàm số mũ logarit $y = \\log_3 x$ trên khoảng $(0; +\\infty)$.
+A. $y' = \\frac{1}{x \\ln 3}$
+B. $y' = \\frac{1}{x}$
+C. $y' = \\frac{\\ln 3}{x}$
+D. $y' = \\frac{1}{3^x}$
+Đáp án: A
+
+Câu 6. Tính thể tích $V$ của khối lăng trụ có diện tích đáy $B = 6$ và chiều cao $h = 4$.
+A. $V = 24$
+B. $V = 8$
+C. $V = 12$
+D. $V = 18$
+Đáp án: A
+
+Câu 7. Tập xác định của hàm số lũy thừa $y = x^{\\sqrt{2}}$ là tập hợp nào dưới đây?
+A. $\\mathbb{R}$
+B. $(0; +\\infty)$
+C. $[0; +\\infty)$
+D. $\\mathbb{R} \\setminus \\{0\\}$
+Đáp án: B
+
+Câu 8. Cho cấp số cộng $(u_n)$ có số hạng đầu $u_1 = 3$ và công sai $d = 2$. Tính số hạng $u_2$.
+A. $u_2 = 5$
+B. $u_2 = 6$
+C. $u_2 = 1$
+D. $u_2 = 9$
+Đáp án: A
+
+Câu 9. Trong không gian $Oxyz$, cho mặt cầu $(S): x^2 + y^2 + z^2 - 2x + 4y - 6z - 1 = 0$. Tìm bán kính $R$.
+A. $R = 15$
+B. $R = \\sqrt{15}$
+C. $R = 3$
+D. $R = \\sqrt{14}$
+Đáp án: B
+
+Câu 10. Tính giá trị tích phân xác định $I = \\int_1^2 2x \\, dx$.
+A. $I = 3$
+B. $I = 4$
+C. $I = 2$
+D. $I = 5$
+Đáp án: A
+
+Câu 11. Tìm nguyên hàm của hàm số $f(x) = \\cos x$ trên tập số thực $\\mathbb{R}$.
+A. $\\int \\cos x \\, dx = \\sin x + C$
+B. $\\int \\cos x \\, dx = -\\sin x + C$
+C. $\\int \\cos x \\, dx = \\cos x + C$
+D. $\\int \\cos x \\, dx = e^x + C$
+Đáp án: A
+
+Câu 12. Thể tích khối cầu bán kính $R$ được tính bằng công thức nào?
+A. $V = \\frac{4}{3}\\pi R^3$
+B. $V = 4\\pi R^2$
+C. $V = \\pi R^3$
+D. $V = 2\\pi R^3$
+Đáp án: A
+
+Câu 13. Điểm cực tiểu của đồ thị hàm số $y = x^3 - 3x$ là điểm nào sau đây?
+A. $(1; -2)$
+B. $(-1; 2)$
+C. $(0; 0)$
+D. $(2; 2)$
+Đáp án: A
+
+Câu 14. Cho khối chóp $S.ABC$ có diện tích đáy $B = 10$ và chiều cao $h = 6$. Tính thể tích $V$ của khối chóp.
+A. $V = 20$
+B. $V = 60$
+C. $V = 30$
+D. $V = 40$
+Đáp án: A
+
+Câu 15. Với mọi $a, b$ dương thỏa mãn $\\log_2 a + \\log_2 b = 3$. Tính giá trị của tích $ab$.
+A. $ab = 8$
+B. $ab = 6$
+C. $ab = 9$
+D. $ab = 5$
+Đáp án: A
+
+Câu 16. Trong không gian $Oxyz$, tọa độ của vectơ $\\vec{u} = 2\\vec{i} - \\vec{j} + 3\\vec{k}$ là cặp số nào?
+A. $(2; -1; 3)$
+B. $(2; 1; 3)$
+C. $(2; -1; -3)$
+D. $(1; -1; 3)$
+Đáp án: A
+
+Câu 17. Số giao điểm của đồ thị hàm số $y = x^4 - 2x^2$ và trục hoành bằng bao nhiêu?
+A. $3$
+B. $4$
+C. $2$
+D. $1$
+Đáp án: A
+
+Câu 18. Cho hàm số $y=f(x)$ liên tục trên $\\mathbb{R}$ và đồ thị như hình vẽ có tối đa bao nhiêu điểm cực trị?
+A. $2$
+B. $3$
+C. $1$
+D. $4$
+Đáp án: A
+
+
+PHẦN II. Câu hỏi trắc nghiệm đúng sai 4 điểm (gồm 4 câu, mỗi câu có 4 ý)
+
+Câu 1. Cho hàm số $f(x) = x^3 - 3x^2 + 2$. Xét tính đúng sai của các khẳng định sau đây:
+a) Hàm số đồng biến trên khoảng $(0; 2)$.
+b) Hàm số đạt cực đại tại điểm $x = 0$ và đạt cực tiểu tại điểm $x = 2$.
+c) Giá trị cực tiểu của hàm số $f(x)$ bằng $-2$.
+d) Phương trình $f(x) = 0$ có đúng 3 nghiệm thực phân biệt.
+Đáp án: a-S, b-Đ, c-Đ, d-Đ
+
+Câu 2. Cho hình chóp $S.ABCD$ có đáy $ABCD$ là hình vuông cạnh $a$. Cạnh bên $SA$ vuông góc với mặt phẳng đáy và $SA = a\\sqrt{2}$. Xét tính đúng sai của các khẳng định sau:
+a) Đường thẳng $BD$ vuông góc với mặt phẳng $(SAC)$.
+b) Góc giữa đường thẳng $SC$ và mặt phẳng $(ABCD)$ bằng $45^\\circ$.
+c) Thể tích khối chóp $S.ABCD$ bằng $\\frac{a^3\\sqrt{2}}{3}$.
+d) Khoảng cách từ điểm $A$ đến mặt phẳng $(SBD)$ bằng $\\frac{a\\sqrt{6}}{3}$.
+Đáp án: a-Đ, b-Đ, c-Đ, d-S
+
+Câu 3. Cho phương trình mũ logarit $\\log_2^2 x - 3\\log_2 x + 2 = 0$. Xét các mệnh đề sau:
+a) Điều kiện xác định của phương trình là $x > 0$.
+b) Đặt $t = \\log_2 x$, phương trình trở thành $t^2 - 3t + 2 = 0$.
+c) Phương trình đã cho có hai nghiệm phân biệt $x_1 = 2$ và $x_2 = 4$.
+d) Tích các nghiệm của phương trình đã cho bằng $6$.
+Đáp án: a-Đ, b-Đ, c-Đ, d-S
+
+Câu 4. Một vật chuyển động thẳng với phương trình vận tốc biểu diễn qua thời gian $v(t) = t^2 - 2t + 3$ (m/s).
+a) Gia tốc của chất điểm tại thời điểm $t = 2$ s bằng $2 \\text{ m/s}^2$.
+b) Vận tốc tức thời nhỏ nhất của chất điểm bằng $2 \\text{ m/s}$.
+c) Quãng đường vật di chuyển từ thời điểm $t = 0$ s đến $t = 3$ s là $12$ m.
+d) Tại thời điểm $t = 1$ s, vật chuyển động với gia tốc bằng $0 \\text{ m/s}^2$.
+Đáp án: a-Đ, b-Đ, c-S, d-Đ
+
+
+PHẦN III. Câu hỏi trả lời ngắn gồm 6 câu (1.5 điểm)
+
+Câu 1. Tìm số nguyên dương $m$ lớn nhất để hàm số $y = x^3 - 3mx^2 + 12x + 1$ đồng biến trên tập số thực $\\mathbb{R}$.
+Đáp án: 2
+
+Câu 2. Cho hàm số $y = f(x)$ liên tục trên $\\mathbb{R}$ thỏa mãn $\\int_0^2 f(x) \\, dx = 4$. Tính tích phân $I = \\int_0^1 f(2x) \\, dx$.
+Đáp án: 2
+
+Câu 3. Cho hình hộp chữ nhật $ABCD.A'B'C'D'$ có các cạnh $AB = 3$, $AD = 4$, $AA' = 5$. Tính thể tích $V$ của khối hộp chữ nhật đó.
+Đáp án: 60
+
+Câu 4. Cho mặt cầu có diện tích bề mặt bằng $36\\pi$. Tính bán kính $R$ của mặt cầu này.
+Đáp án: 3
+
+Câu 5. Một chất điểm chuyển động theo quy luật quãng đường $s(t) = -t^3 + 9t^2 + t$. Tính vận tốc lớn nhất (m/s) đạt được của chất điểm.
+Đáp án: 28
+
+Câu 6. Tính giá trị giới hạn của biểu thức toán học $L = \\lim_{x \\to 3} \\frac{x^2 - 9}{x - 3}$.
+Đáp án: 6`;
+
+    function loadSample2025() {
+      document.getElementById('raw-exam-input').value = SAMPLE_DE;
+      showStatus('Nạp đề mẫu 2025 thành công! Hãy nhấn nút "Phân tích và Tạo đề thi".', 'success');
+    }
+
+    // --- FIREBASE INITIALIZATION & FALLBACK ---
+    const firebaseConfig = {
+      apiKey: "MOCK_API_KEY",
+      authDomain: "mock-project.firebaseapp.com",
+      projectId: "mock-project",
+      storageBucket: "mock-project.appspot.com",
+      messagingSenderId: "12345678",
+      appId: "1:1234:web:abcd"
+    };
+
+    let useFirebase = false;
+    let db = null;
+
+    try {
+      if (firebase.apps.length === 0) {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.firestore();
+        // Check if configuration is replaced with real values
+        if (firebaseConfig.apiKey !== "MOCK_API_KEY") {
+          useFirebase = true;
+        }
+      }
+    } catch (e) {
+      console.warn("Firebase initialize failed. Falling back to robust LocalStorage database.");
+    }
+
+    let parsedQuestions = null;
+
+    // --- CUSTOM EXAM TEXT PARSER ---
+    function parseExamText(text) {
+      const normalized = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+      
+      const p1Regex = /(?:PHẦN|Phần)\s+(?:I|MỘT|1)/i;
+      const p2Regex = /(?:PHẦN|Phần)\s+(?:II|HAI|2)/i;
+      const p3Regex = /(?:PHẦN|Phần)\s+(?:III|BA|3)/i;
+      
+      const p1Idx = normalized.search(p1Regex);
+      const p2Idx = normalized.search(p2Regex);
+      const p3Idx = normalized.search(p3Regex);
+      
+      let p1Text = '';
+      let p2Text = '';
+      let p3Text = '';
+      
+      if (p1Idx !== -1) {
+        const end = p2Idx !== -1 ? p2Idx : (p3Idx !== -1 ? p3Idx : normalized.length);
+        p1Text = normalized.substring(p1Idx, end);
+      } else {
+        const end = p2Idx !== -1 ? p2Idx : (p3Idx !== -1 ? p3Idx : normalized.length);
+        p1Text = normalized.substring(0, end);
+      }
+      
+      if (p2Idx !== -1) {
+        const end = p3Idx !== -1 ? p3Idx : normalized.length;
+        p2Text = normalized.substring(p2Idx, end);
+      }
+      
+      if (p3Idx !== -1) {
+        p3Text = normalized.substring(p3Idx);
+      }
+      
+      const multipleChoice = [];
+      const trueFalse = [];
+      const shortAnswer = [];
+      
+      // Parse MCQ
+      const mcBlocks = p1Text.split(/Câu\s+(\d+)\s*[:\.]\s*/i);
+      for (let i = 1; i < mcBlocks.length; i += 2) {
+        const num = mcBlocks[i];
+        const content = mcBlocks[i+1] || '';
+        
+        const getOpt = (opt, str) => {
+          const regex = new RegExp(`(?:\\s|^|\\b)${opt}[\\.\\)\\s]`);
+          const match = str.match(regex);
+          return match ? match.index : -1;
+        };
+        
+        const idxA = getOpt('A', content);
+        const idxB = getOpt('B', content);
+        const idxC = getOpt('C', content);
+        const idxD = getOpt('D', content);
+        
+        if (idxA !== -1 && idxB !== -1 && idxC !== -1 && idxD !== -1) {
+          const qText = content.substring(0, idxA).trim();
+          const aText = content.substring(idxA, idxB).replace(/^A[\.\)\s]+/, '').trim();
+          const bText = content.substring(idxB, idxC).replace(/^B[\.\)\s]+/, '').trim();
+          const cText = content.substring(idxC, idxD).replace(/^C[\.\)\s]+/, '').trim();
+          
+          let dText = content.substring(idxD).replace(/^D[\.\)\s]+/, '').trim();
+          let correct = 'A';
+          const ansMatch = dText.match(/(?:Đáp\s+án|Đáp\s+án\s+đúng)\s*[:\-\s]*([A-D])/i);
+          if (ansMatch) {
+            correct = ansMatch[1].toUpperCase();
+            dText = dText.substring(0, ansMatch.index).trim();
+          }
+          
+          multipleChoice.push({
+            id: 'mc_' + num + '_' + Date.now(),
+            questionText: qText,
+            options: [aText, bText, cText, dText],
+            correctOption: correct
+          });
+        }
+      }
+      
+      // Parse TF
+      const tfBlocks = p2Text.split(/Câu\s+(\d+)\s*[:\.]\s*/i);
+      for (let i = 1; i < tfBlocks.length; i += 2) {
+        const num = tfBlocks[i];
+        const content = tfBlocks[i+1] || '';
+        
+        const getStmt = (st, str) => {
+          const regex = new RegExp(`(?:\\s|^|\\b)${st}[\\.\\)\\s]`, 'i');
+          const match = str.match(regex);
+          return match ? match.index : -1;
+        };
+        
+        const idxA = getStmt('a', content);
+        const idxB = getStmt('b', content);
+        const idxC = getStmt('c', content);
+        const idxD = getStmt('d', content);
+        
+        if (idxA !== -1 && idxB !== -1 && idxC !== -1 && idxD !== -1) {
+          const qText = content.substring(0, idxA).trim();
+          const aText = content.substring(idxA, idxB).replace(/^a[\.\)\s]+/i, '').trim();
+          const bText = content.substring(idxB, idxC).replace(/^b[\.\)\s]+/i, '').trim();
+          const cText = content.substring(idxC, idxD).replace(/^c[\.\)\s]+/i, '').trim();
+          
+          let dText = content.substring(idxD).replace(/^d[\.\)\s]+/i, '').trim();
+          let correctList = [true, false, true, false];
+          
+          const ansMatch = dText.match(/(?:Đáp\s+án|Đáp\s+án\s+đúng)\s*[:\-\s]*([ĐđSs,\s\-a-dA-D]+)/i);
+          if (ansMatch) {
+            const rawAnsStr = ansMatch[1];
+            dText = dText.substring(0, ansMatch.index).trim();
+            if (rawAnsStr.includes('a-') || rawAnsStr.includes('b-') || rawAnsStr.includes('c-') || rawAnsStr.includes('d-')) {
+              const parts = rawAnsStr.split(/[,;\s]+/);
+              parts.forEach(p => {
+                const m = p.match(/([a-d])\s*-\s*([đĐsS])/i);
+                if (m) {
+                  const letter = m[1].toLowerCase();
+                  const val = m[2].toUpperCase() === 'Đ';
+                  const idx = letter === 'a' ? 0 : letter === 'b' ? 1 : letter === 'c' ? 2 : 3;
+                  correctList[idx] = val;
+                }
+              });
+            } else {
+              const clean = rawAnsStr.replace(/[^đĐsS]/g, '').toUpperCase();
+              for (let k = 0; k < 4; k++) {
+                if (clean[k]) {
+                  correctList[k] = (clean[k] === 'Đ');
+                }
+              }
+            }
+          }
+          
+          trueFalse.push({
+            id: 'tf_' + num + '_' + Date.now(),
+            questionText: qText,
+            statements: [
+              { text: aText, isTrue: correctList[0] },
+              { text: bText, isTrue: correctList[1] },
+              { text: cText, isTrue: correctList[2] },
+              { text: dText, isTrue: correctList[3] }
+            ]
+          });
+        }
+      }
+      
+      // Parse SA
+      const saBlocks = p3Text.split(/Câu\s+(\d+)\s*[:\.]\s*/i);
+      for (let i = 1; i < saBlocks.length; i += 2) {
+        const num = saBlocks[i];
+        let content = saBlocks[i+1] || '';
+        
+        let correct = '';
+        const ansMatch = content.match(/(?:Đáp\s+án|Đáp\s+án\s+đúng)\s*[:\-\s]*([0-9a-zA-Z\.,\\/\\+\\-]+)/i);
+        if (ansMatch) {
+          correct = ansMatch[1].trim();
+          content = content.substring(0, ansMatch.index).trim();
+        }
+        
+        shortAnswer.push({
+          id: 'sa_' + num + '_' + Date.now(),
+          questionText: content,
+          correctAnswer: correct
+        });
+      }
+      
+      return { multipleChoice, trueFalse, shortAnswer };
+    }
+
+    // --- VIEW TRIGGERS ---
+    function parseAndGenerateExam() {
+      const input = document.getElementById('raw-exam-input').value;
+      if (!input.trim()) {
+        showStatus('Vui lòng nhập đề thi trước!', 'danger');
+        return;
+      }
+      
+      try {
+        const parsed = parseExamText(input);
+        
+        const mcCount = parsed.multipleChoice.length;
+        const tfCount = parsed.trueFalse.length;
+        const saCount = parsed.shortAnswer.length;
+        
+        if (mcCount === 0 && tfCount === 0 && saCount === 0) {
+          showStatus('Không tìm thấy câu hỏi nào! Hãy kiểm tra lại định dạng.', 'danger');
+          return;
+        }
+        
+        parsedQuestions = parsed;
+        
+        // Render preview sheets
+        renderPreview(parsed);
+        
+        document.getElementById('btn-save-quiz').style.display = 'inline-block';
+        document.getElementById('exam-preview-section').style.display = 'block';
+        showStatus(`Đã phân tách thành công: ${mcCount} câu Phần I, ${tfCount} câu Phần II, và ${saCount} câu Phần III!`, 'success');
+        
+        // Render math equations via MathJax
+        setTimeout(() => {
+          if (window.MathJax && window.MathJax.typesetPromise) {
+            window.MathJax.typesetPromise();
+          }
+        }, 150);
+        
+      } catch (e) {
+        showStatus('Có lỗi xảy ra khi phân tích: ' + e.message, 'danger');
+      }
+    }
+
+    function renderPreview(exam) {
+      const p1Cont = document.getElementById('part1-container');
+      const p2Cont = document.getElementById('part2-container');
+      const p3Cont = document.getElementById('part3-container');
+      
+      p1Cont.innerHTML = '';
+      p2Cont.innerHTML = '';
+      p3Cont.innerHTML = '';
+      
+      if (exam.multipleChoice.length > 0) {
+        document.getElementById('preview-part1').style.display = 'block';
+        exam.multipleChoice.forEach((q, idx) => {
+          const div = document.createElement('div');
+          div.className = 'question-block';
+          div.innerHTML = `
+            <p class="fw-bold m-0 text-slate-950">Câu ${idx+1}. ${q.questionText}</p>
+            <div class="row mt-2 g-2 pl-3">
+              <div class="col-sm-6 ${q.correctOption === 'A' ? 'text-success fw-bold' : ''}"><strong>A.</strong> ${q.options[0]}</div>
+              <div class="col-sm-6 ${q.correctOption === 'B' ? 'text-success fw-bold' : ''}"><strong>B.</strong> ${q.options[1]}</div>
+              <div class="col-sm-6 ${q.correctOption === 'C' ? 'text-success fw-bold' : ''}"><strong>C.</strong> ${q.options[2]}</div>
+              <div class="col-sm-6 ${q.correctOption === 'D' ? 'text-success fw-bold' : ''}"><strong>D.</strong> ${q.options[3]}</div>
+            </div>
+            <div class="mt-2 text-muted small italic">Đáp án: ${q.correctOption}</div>
+          `;
+          p1Cont.appendChild(div);
+        });
+      }
+      
+      if (exam.trueFalse.length > 0) {
+        document.getElementById('preview-part2').style.display = 'block';
+        exam.trueFalse.forEach((q, idx) => {
+          const div = document.createElement('div');
+          div.className = 'question-block';
+          div.innerHTML = `
+            <p class="fw-bold m-0 text-slate-950">Câu ${idx+1}. ${q.questionText}</p>
+            <div class="bg-light p-3 rounded-3 mt-2">
+              <div class="d-flex justify-content-between align-items-center py-1">
+                <span><strong>a)</strong> ${q.statements[0].text}</span>
+                <span class="badge ${q.statements[0].isTrue ? 'bg-success' : 'bg-danger'}">${q.statements[0].isTrue ? 'Đúng' : 'Sai'}</span>
+              </div>
+              <div class="d-flex justify-content-between align-items-center py-1">
+                <span><strong>b)</strong> ${q.statements[1].text}</span>
+                <span class="badge ${q.statements[1].isTrue ? 'bg-success' : 'bg-danger'}">${q.statements[1].isTrue ? 'Đúng' : 'Sai'}</span>
+              </div>
+              <div class="d-flex justify-content-between align-items-center py-1">
+                <span><strong>c)</strong> ${q.statements[2].text}</span>
+                <span class="badge ${q.statements[2].isTrue ? 'bg-success' : 'bg-danger'}">${q.statements[2].isTrue ? 'Đúng' : 'Sai'}</span>
+              </div>
+              <div class="d-flex justify-content-between align-items-center py-1">
+                <span><strong>d)</strong> ${q.statements[3].text}</span>
+                <span class="badge ${q.statements[3].isTrue ? 'bg-success' : 'bg-danger'}">${q.statements[3].isTrue ? 'Đúng' : 'Sai'}</span>
+              </div>
+            </div>
+          `;
+          p2Cont.appendChild(div);
+        });
+      }
+      
+      if (exam.shortAnswer.length > 0) {
+        document.getElementById('preview-part3').style.display = 'block';
+        exam.shortAnswer.forEach((q, idx) => {
+          const div = document.createElement('div');
+          div.className = 'question-block';
+          div.innerHTML = `
+            <p class="fw-bold m-0 text-slate-950">Câu ${idx+1}. ${q.questionText}</p>
+            <div class="mt-2 text-muted small">Đáp số chuẩn: <strong class="bg-secondary bg-opacity-10 px-2 py-0.5 rounded text-dark">${q.correctAnswer}</strong></div>
+          `;
+          p3Cont.appendChild(div);
+        });
+      }
+    }
+
+    // --- SAVE & EMULATE SYSTEM ---
+    function saveToDatabase() {
+      if (!parsedQuestions) {
+        showStatus('Vui lòng tạo đề thi trước!', 'danger');
+        return;
+      }
+      
+      const code = Math.floor(100000 + Math.random() * 900000).toString();
+      
+      if (useFirebase && db) {
+        // Save to real Firestore
+        db.collection("quizzes").doc(code).set(parsedQuestions)
+          .then(() => {
+            showSuccessCode(code);
+          })
+          .catch((err) => {
+            console.error("Firestore save failed: ", err);
+            saveToLocalStorage(code);
+          });
+      } else {
+        // Fallback to LocalStorage so everything is 100% reactive in preview instantly
+        saveToLocalStorage(code);
+      }
+    }
+
+    function saveToLocalStorage(code) {
+      const saved = JSON.parse(localStorage.getItem('edu_firebase_quizzes') || '{}');
+      saved[code] = parsedQuestions;
+      localStorage.setItem('edu_firebase_quizzes', JSON.stringify(saved));
+      showSuccessCode(code);
+    }
+
+    function showSuccessCode(code) {
+      document.getElementById('display-code').innerText = code;
+      document.getElementById('quiz-code-card').style.display = 'block';
+      document.getElementById('quiz-code-card').scrollIntoView({ behavior: 'smooth' });
+      showStatus(`Lưu đề thi thành công! MÃ QUIZ TRUY CẬP LÀ: ${code}`, 'success');
+    }
+
+    function copyQuizCode() {
+      const code = document.getElementById('display-code').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        const icon = document.getElementById('copy-icon');
+        icon.className = 'fa-solid fa-check text-success';
+        setTimeout(() => {
+          icon.className = 'fa-regular fa-copy';
+        }, 1500);
+      });
+    }
+
+    function showStatus(text, type) {
+      const el = document.getElementById('status-alert');
+      el.className = `alert mt-4 alert-${type}`;
+      el.innerText = text;
+      el.style.display = 'block';
+    }
+
+    // --- TAB SWITCHER & MANAGEMENT Logic ---
+    function switchTab(tab) {
+      const designBtn = document.getElementById('tab-btn-design');
+      const manageBtn = document.getElementById('tab-btn-manage');
+      const designSec = document.getElementById('design-section-container');
+      const manageSec = document.getElementById('manage-section-container');
+
+      if (tab === 'design') {
+        designBtn.classList.add('active');
+        designBtn.classList.remove('text-muted');
+        manageBtn.classList.remove('active');
+        manageBtn.classList.add('text-muted');
+        designSec.style.display = 'block';
+        manageSec.style.display = 'none';
+      } else {
+        manageBtn.classList.add('active');
+        manageBtn.classList.remove('text-muted');
+        designBtn.classList.remove('active');
+        designBtn.classList.add('text-muted');
+        designSec.style.display = 'none';
+        manageSec.style.display = 'block';
+        refreshQuizList();
+      }
+    }
+
+    let allQuizzes = {};
+    let allSubmissions = [];
+
+    function refreshQuizList() {
+      // 1. Fetch quizzes
+      if (useFirebase && db) {
+        db.collection("quizzes").get().then((querySnapshot) => {
+          allQuizzes = {};
+          querySnapshot.forEach((doc) => {
+            allQuizzes[doc.id] = doc.data();
+          });
+          // Also check local storage for local quizzes
+          const localQuizzes = JSON.parse(localStorage.getItem('edu_firebase_quizzes') || '{}');
+          Object.assign(allQuizzes, localQuizzes);
+          loadSubmissions();
+        }).catch((err) => {
+          console.warn("Firestore quizzes load failed: ", err);
+          loadQuizzesFromLocal();
+        });
+      } else {
+        loadQuizzesFromLocal();
+      }
+    }
+
+    function loadQuizzesFromLocal() {
+      allQuizzes = JSON.parse(localStorage.getItem('edu_firebase_quizzes') || '{}');
+      loadSubmissions();
+    }
+
+    function loadSubmissions() {
+      if (useFirebase && db) {
+        db.collection("submissions").get().then((querySnapshot) => {
+          allSubmissions = [];
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            data.id = doc.id;
+            allSubmissions.push(data);
+          });
+          const localSubs = JSON.parse(localStorage.getItem('edu_firebase_submissions') || '[]');
+          allSubmissions = allSubmissions.concat(localSubs);
+          renderDashboard();
+        }).catch((err) => {
+          console.warn("Firestore submissions load failed: ", err);
+          loadSubmissionsFromLocal();
+        });
+      } else {
+        loadSubmissionsFromLocal();
+      }
+    }
+
+    function loadSubmissionsFromLocal() {
+      allSubmissions = JSON.parse(localStorage.getItem('edu_firebase_submissions') || '[]');
+      renderDashboard();
+    }
+
+    function renderDashboard() {
+      // Statistics calculations
+      const quizCodes = Object.keys(allQuizzes);
+      document.getElementById('stats-total-quizzes').innerText = quizCodes.length;
+      document.getElementById('stats-total-submissions').innerText = allSubmissions.length;
+
+      let scoreSum = 0;
+      allSubmissions.forEach(s => scoreSum += Number(s.score || 0));
+      const avg = allSubmissions.length > 0 ? (scoreSum / allSubmissions.length) : 0;
+      document.getElementById('stats-avg-score').innerText = avg.toFixed(2);
+
+      // Render quizzes table
+      const tbody = document.getElementById('quizzes-table-body');
+      tbody.innerHTML = '';
+
+      if (quizCodes.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-4"><i class="fa-solid fa-folder-open d-block fs-3 mb-2"></i>Chưa có đề thi nào được tạo.</td></tr>`;
+        return;
+      }
+
+      quizCodes.forEach(code => {
+        const quiz = allQuizzes[code];
+        const quizSubs = allSubmissions.filter(s => s.quizCode === code);
+        const title = quiz.multipleChoice?.[0]?.questionText 
+          ? `Đề thi chuẩn cấu trúc 3 phần (Mã: ${code})` 
+          : `Đề thi trắc nghiệm THPT Quốc gia`;
+
+        const totalQuestions = (quiz.multipleChoice?.length || 0) + (quiz.trueFalse?.length || 0) + (quiz.shortAnswer?.length || 0);
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="ps-3"><span class="badge bg-indigo-100 text-indigo font-mono fw-bold px-2 py-1">${code}</span></td>
+          <td><div class="fw-bold text-slate-800 text-truncate" style="max-width: 250px;">${title}</div></td>
+          <td><span class="text-muted small">${totalQuestions} câu hỏi</span></td>
+          <td class="text-center"><span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2.5 py-1 fw-bold font-mono">${quizSubs.length}</span></td>
+          <td class="text-end pe-3">
+            <button onclick="viewSubmissions('${code}')" class="btn btn-sm btn-outline-primary rounded-pill me-1">
+              <i class="fa-solid fa-users me-1"></i>Xem bài nộp
+            </button>
+            <button onclick="deleteQuiz('${code}')" class="btn btn-sm btn-outline-danger rounded-pill">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    let activeSubmissionsQuizCode = null;
+
+    function viewSubmissions(code) {
+      activeSubmissionsQuizCode = code;
+      const quiz = allQuizzes[code];
+      const quizSubs = allSubmissions.filter(s => s.quizCode === code);
+
+      document.getElementById('selected-quiz-info').innerText = `Đề thi mã: ${code} | Tổng số bài nộp: ${quizSubs.length}`;
+      document.getElementById('quiz-submissions-card').style.display = 'block';
+      document.getElementById('submission-detail-card').style.display = 'none';
+
+      const tbody = document.getElementById('submissions-table-body');
+      tbody.innerHTML = '';
+
+      if (quizSubs.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted py-4">Chưa có học sinh nào nộp bài cho đề thi này.</td></tr>`;
+        return;
+      }
+
+      quizSubs.forEach((sub, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="ps-3 fw-bold text-slate-900">${sub.studentName}</td>
+          <td class="font-mono text-muted small">${sub.studentId || '-'}</td>
+          <td class="small text-muted">${sub.submittedAt || '-'}</td>
+          <td class="text-center font-mono small">${(sub.scorePart1 || 0).toFixed(2)}</td>
+          <td class="text-center font-mono small">${(sub.scorePart2 || 0).toFixed(2)}</td>
+          <td class="text-center font-mono small">${(sub.scorePart3 || 0).toFixed(2)}</td>
+          <td class="text-center fw-extrabold text-indigo font-mono fs-6">${(sub.score || 0).toFixed(2)}</td>
+          <td class="text-end pe-3">
+            <button onclick="viewDetailedSubmission('${code}', ${idx})" class="btn btn-sm btn-primary rounded-pill">
+              <i class="fa-solid fa-magnifying-glass me-1"></i>Chi tiết
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('quiz-submissions-card').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function closeSubmissionsView() {
+      document.getElementById('quiz-submissions-card').style.display = 'none';
+      document.getElementById('submission-detail-card').style.display = 'none';
+    }
+
+    function deleteQuiz(code) {
+      if (!confirm(`Bạn có chắc chắn muốn xóa đề thi mã ${code}? Thao tác này không thể hoàn tác.`)) return;
+
+      if (useFirebase && db) {
+        db.collection("quizzes").doc(code).delete()
+          .then(() => {
+            // Delete locally as well if exists
+            const localQuizzes = JSON.parse(localStorage.getItem('edu_firebase_quizzes') || '{}');
+            delete localQuizzes[code];
+            localStorage.setItem('edu_firebase_quizzes', JSON.stringify(localQuizzes));
+            refreshQuizList();
+            closeSubmissionsView();
+          })
+          .catch(err => {
+            console.error("Firestore delete failed, using fallback:", err);
+            deleteQuizLocal(code);
+          });
+      } else {
+        deleteQuizLocal(code);
+      }
+    }
+
+    function deleteQuizLocal(code) {
+      const localQuizzes = JSON.parse(localStorage.getItem('edu_firebase_quizzes') || '{}');
+      delete localQuizzes[code];
+      localStorage.setItem('edu_firebase_quizzes', JSON.stringify(localQuizzes));
+      refreshQuizList();
+      closeSubmissionsView();
+    }
+
+    function viewDetailedSubmission(code, subIndex) {
+      const quiz = allQuizzes[code];
+      const quizSubs = allSubmissions.filter(s => s.quizCode === code);
+      const sub = quizSubs[subIndex];
+
+      if (!sub) return;
+
+      document.getElementById('submission-detail-student-info').innerText = `Học sinh: ${sub.studentName} (${sub.studentId}) | Điểm: ${sub.score} / 10 | Thời gian nộp: ${sub.submittedAt}`;
+      document.getElementById('submission-detail-card').style.display = 'block';
+
+      const container = document.getElementById('submission-detail-content');
+      container.innerHTML = '';
+
+      // Render the detailed exam paper showing correct/incorrect choices
+      // Part I
+      if (quiz.multipleChoice && quiz.multipleChoice.length > 0) {
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'bg-light p-2.5 border rounded-3 fw-bold mt-3 mb-3 small';
+        titleDiv.innerHTML = `PHẦN I. Câu hỏi trắc nghiệm nhiều lựa chọn (${(sub.scorePart1 || 0).toFixed(2)} / 4.5đ)`;
+        container.appendChild(titleDiv);
+
+        quiz.multipleChoice.forEach((q, qIdx) => {
+          const div = document.createElement('div');
+          div.className = 'p-3 border rounded-3 mb-3 bg-white';
+          const userAns = sub.answers?.mc?.[q.id] || null;
+          const correctAns = q.correctOption;
+
+          let optionRows = '';
+          q.options.forEach((opt, oIdx) => {
+            const letter = oIdx === 0 ? 'A' : oIdx === 1 ? 'B' : oIdx === 2 ? 'C' : 'D';
+            const isUser = userAns === letter;
+            const isCorrect = correctAns === letter;
+
+            let bgClass = '';
+            let icon = '';
+            if (isCorrect) {
+              bgClass = 'bg-success bg-opacity-10 text-success border border-success border-opacity-30';
+              icon = '<i class="fa-solid fa-circle-check me-2"></i>';
+            } else if (isUser && !isCorrect) {
+              bgClass = 'bg-danger bg-opacity-10 text-danger border border-danger border-opacity-30';
+              icon = '<i class="fa-solid fa-circle-xmark me-2"></i>';
+            }
+
+            optionRows += `
+              <div class="col-sm-6 py-1">
+                <div class="p-2 rounded-2 ${bgClass}" style="font-size: 13px;">
+                  ${icon}<strong>${letter}.</strong> ${opt} ${isUser ? '<span class="badge bg-secondary ms-1">Đã chọn</span>' : ''}
+                </div>
+              </div>
+            `;
+          });
+
+          div.innerHTML = `
+            <div class="d-flex justify-content-between mb-2">
+              <strong class="text-slate-800">Câu ${qIdx+1}. ${q.questionText}</strong>
+              <span class="badge ${userAns === correctAns ? 'bg-success' : 'bg-danger'} bg-opacity-10 text-success" style="color: inherit !important;">
+                ${userAns === correctAns ? 'Đúng (+0.25đ)' : 'Sai (0.00đ)'}
+              </span>
+            </div>
+            <div class="row g-2">${optionRows}</div>
+          `;
+          container.appendChild(div);
+        });
+      }
+
+      // Part II
+      if (quiz.trueFalse && quiz.trueFalse.length > 0) {
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'bg-light p-2.5 border rounded-3 fw-bold mt-4 mb-3 small';
+        titleDiv.innerHTML = `PHẦN II. Câu hỏi trắc nghiệm Đúng/Sai (${(sub.scorePart2 || 0).toFixed(2)} / 4.0đ)`;
+        container.appendChild(titleDiv);
+
+        quiz.trueFalse.forEach((q, qIdx) => {
+          const div = document.createElement('div');
+          div.className = 'p-3 border rounded-3 mb-3 bg-white';
+          const userAnswers = sub.answers?.tf?.[q.id] || [null, null, null, null];
+
+          let statementsRows = '';
+          let correctCount = 0;
+          q.statements.forEach((stmt, sIdx) => {
+            const letter = sIdx === 0 ? 'a' : sIdx === 1 ? 'b' : sIdx === 2 ? 'c' : 'd';
+            const userVal = userAnswers[sIdx];
+            const correctVal = stmt.correctValue !== undefined ? stmt.correctValue : stmt.isTrue;
+            const isCorrect = userVal === correctVal;
+
+            if (isCorrect) correctCount++;
+
+            statementsRows += `
+              <div class="d-flex justify-content-between align-items-center py-2 border-bottom border-light" style="font-size: 13px;">
+                <span><strong>${letter})</strong> ${stmt.text || stmt.statementText}</span>
+                <div class="d-flex gap-2">
+                  <span class="badge ${correctVal === true ? 'bg-success' : 'bg-light text-dark'}">Đúng</span>
+                  <span class="badge ${correctVal === false ? 'bg-danger' : 'bg-light text-dark'}">Sai</span>
+                  <span class="badge ${isCorrect ? 'bg-success bg-opacity-15 text-success' : 'bg-danger bg-opacity-15 text-danger'}">
+                    ${userVal === null ? 'Trống' : (userVal ? 'Chọn Đúng' : 'Chọn Sai')} - ${isCorrect ? 'Đúng' : 'Sai'}
+                  </span>
+                </div>
+              </div>
+            `;
+          });
+
+          let earned = 0;
+          if (correctCount === 4) earned = 1.0;
+          else if (correctCount === 3) earned = 0.5;
+          else if (correctCount === 2) earned = 0.25;
+          else if (correctCount === 1) earned = 0.1;
+
+          div.innerHTML = `
+            <div class="d-flex justify-content-between mb-2 pb-2 border-bottom">
+              <strong class="text-slate-800">Câu ${qIdx+1}. ${q.questionText}</strong>
+              <span class="badge ${earned > 0 ? 'bg-success' : 'bg-danger'} bg-opacity-10" style="color: inherit !important;">
+                +${earned}đ (${correctCount}/4 ý đúng)
+              </span>
+            </div>
+            <div>${statementsRows}</div>
+          `;
+          container.appendChild(div);
+        });
+      }
+
+      // Part III
+      if (quiz.shortAnswer && quiz.shortAnswer.length > 0) {
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'bg-light p-2.5 border rounded-3 fw-bold mt-4 mb-3 small';
+        titleDiv.innerHTML = `PHẦN III. Câu hỏi trả lời ngắn (${(sub.scorePart3 || 0).toFixed(2)} / 1.5đ)`;
+        container.appendChild(titleDiv);
+
+        quiz.shortAnswer.forEach((q, qIdx) => {
+          const div = document.createElement('div');
+          div.className = 'p-3 border rounded-3 mb-3 bg-white';
+          const userVal = (sub.answers?.sa?.[q.id] || '').trim().toLowerCase().replace(/,/g, '.');
+          const correctVal = (q.correctAnswer || '').trim().toLowerCase().replace(/,/g, '.');
+          const isCorrect = userVal === correctVal && correctVal !== '';
+
+          div.innerHTML = `
+            <div class="d-flex justify-content-between mb-2">
+              <strong class="text-slate-800">Câu ${qIdx+1}. ${q.questionText}</strong>
+              <span class="badge ${isCorrect ? 'bg-success' : 'bg-danger'} bg-opacity-10 text-success" style="color: inherit !important;">
+                ${isCorrect ? 'Đúng (+0.25đ)' : 'Sai (0.00đ)'}
+              </span>
+            </div>
+            <div class="bg-light p-2.5 rounded-2" style="font-size: 13px;">
+              <div>Học sinh trả lời: <strong class="${isCorrect ? 'text-success' : 'text-danger'}">${sub.answers?.sa?.[q.id] || '(Trống)'}</strong></div>
+              <div class="mt-1">Đáp số chuẩn: <strong class="text-success">${q.correctAnswer}</strong></div>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+      }
+
+      document.getElementById('submission-detail-card').scrollIntoView({ behavior: 'smooth' });
+
+      setTimeout(() => {
+        if (window.MathJax && window.MathJax.typesetPromise) {
+          window.MathJax.typesetPromise();
+        }
+      }, 150);
+    }
+
+    function closeSubmissionDetailView() {
+      document.getElementById('submission-detail-card').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
